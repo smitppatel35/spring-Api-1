@@ -4,6 +4,7 @@ import com.smippatel35.demo.demo.exception.LibraryResourceAlreadyExistException;
 import com.smippatel35.demo.demo.exception.LibraryResourceNotFoundException;
 import com.smippatel35.demo.demo.utils.LibraryUtils;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -74,5 +75,14 @@ public class PublisherService {
         } else {
             throw new LibraryResourceNotFoundException("Publisher Id: "+ publisherToBeUpdated.getPublisherId() +" Not Found!!");
         }
+    }
+
+    public void deletePublisher(Integer publisherId) throws LibraryResourceNotFoundException {
+        try {
+            publisherRepository.deleteById(publisherId);
+        }catch (EmptyResultDataAccessException e){
+            throw new LibraryResourceNotFoundException("Publisher Id: "+ publisherId +" Not Found!!");
+        }
+
     }
 }
