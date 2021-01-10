@@ -7,7 +7,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PublisherService {
@@ -84,5 +87,21 @@ public class PublisherService {
             throw new LibraryResourceNotFoundException("Publisher Id: "+ publisherId +" Not Found!!");
         }
 
+    }
+
+    public List<Publisher> searchPublisher(String name) {
+
+        List<PublisherEntity> publisherEntities = null;
+        if (LibraryUtils.doesStringValueExist(name)){
+            publisherEntities = publisherRepository.findByNameContaining(name);
+        }
+        if(publisherEntities != null && publisherEntities.size() > 0){
+            return publisherEntities
+                    .stream()
+                    .map(pe -> createPublisherFromEntity(pe))
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

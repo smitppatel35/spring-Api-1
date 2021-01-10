@@ -2,6 +2,7 @@ package com.smippatel35.demo.demo.publisher;
 
 import com.smippatel35.demo.demo.exception.LibraryResourceAlreadyExistException;
 import com.smippatel35.demo.demo.exception.LibraryResourceNotFoundException;
+import com.smippatel35.demo.demo.utils.LibraryUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +65,18 @@ public class PublisherController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path = "/search")
+    public ResponseEntity<?> searchPublisher(@RequestParam String name){
+
+        if (!LibraryUtils.doesStringValueExist(name)){
+            return new ResponseEntity<>("Please Enter name to search publisher", HttpStatus.BAD_REQUEST);
+        } else {
+
+        }
+
+        return new ResponseEntity<>(publisherService.searchPublisher(name), HttpStatus.OK);
 
     }
 }
