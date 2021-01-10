@@ -2,6 +2,7 @@ package com.smippatel35.demo.demo.publisher;
 
 import com.smippatel35.demo.demo.exception.LibraryResourceAlreadyExistException;
 import com.smippatel35.demo.demo.exception.LibraryResourceNotFoundException;
+import com.smippatel35.demo.demo.utils.LibraryUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -53,5 +54,25 @@ public class PublisherService {
 
     private Publisher createPublisherFromEntity(PublisherEntity pe) {
         return new Publisher(pe.getPublisherId(), pe.getName(), pe.getEmailId(), pe.getPhoneNumber());
+    }
+
+
+    public void updatePublisher(Publisher publisherToBeUpdated) throws LibraryResourceNotFoundException {
+        Optional<PublisherEntity> publisherEntity = publisherRepository.findById(publisherToBeUpdated.getPublisherId());
+
+        if (publisherEntity.isPresent()){
+
+            PublisherEntity pe = publisherEntity.get();
+            if (LibraryUtils.doesStringValueExist(publisherToBeUpdated.getEmailId())){
+                pe.setEmailId(publisherToBeUpdated.getEmailId());
+            }
+            if (LibraryUtils.doesStringValueExist(publisherToBeUpdated.getPhoneNumber())){
+                pe.setPhoneNumber(publisherToBeUpdated.getPhoneNumber());
+            }
+            publisherRepository.save(pe);
+            publisherToBeUpdated = createPublisherFromEntity(pe);
+        } else {
+            throw new LibraryResourceNotFoundException("Publisher Id: "+ publisherToBeUpdated.getPublisherId() +" Not Found!!");
+        }
     }
 }
