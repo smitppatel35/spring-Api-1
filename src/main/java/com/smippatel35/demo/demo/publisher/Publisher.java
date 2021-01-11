@@ -1,10 +1,19 @@
 package com.smippatel35.demo.demo.publisher;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+
 public class Publisher {
 
     private Integer publisherId;
+
+    @Size(min = 1, max = 50, message = "Publisher name must be between 1 to 50 characters")
     private String name;
+
+    @Email(message = "Please Enter a valid Email Id")
     private String emailId;
+
+    @Size(min = 10, max = 10, message = "Please Enter a 10 digit phone number")
     private String phoneNumber;
 
     public Publisher() {
